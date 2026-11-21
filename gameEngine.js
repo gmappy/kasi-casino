@@ -1,4 +1,13 @@
-// gameEngine.js - Strict South African 40-Card Kasi Casino Game Engine
+/**
+ * gameEngine.js - Strict South African 40-Card Kasi Casino Game Engine
+ * 
+ * Implements standard Kasi / Township rules:
+ * - 40-Card Deck (Aces through 10, face cards stripped)
+ * - Ace is strictly worth 1 point in captures and builds
+ * - 3-Player 10-10-10-10 deal
+ * - Single builds vs locked compound/double builds
+ * - Sweeps, last capture bonuses, 11-point scoring system, and Count Out.
+ */
 
 export const SUITS = ['S', 'H', 'D', 'C'];
 export const SUIT_SYMBOLS = { S: '♠', H: '♥', D: '♦', C: '♣' };
@@ -7,11 +16,21 @@ export const SUIT_COLORS = { S: '#1e293b', H: '#dc2626', D: '#ea580c', C: '#3341
 
 export const RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Ace=1, no Jacks/Queens/Kings
 
+/**
+ * Returns human-readable rank label ('A' for 1, or string number)
+ * @param {number} rank - Card rank integer (1-10)
+ * @returns {string}
+ */
 export function getRankLabel(rank) {
   if (rank === 1) return 'A';
   return String(rank);
 }
 
+/**
+ * Generates a standard 40-card South African Kasi Casino deck.
+ * Strips all Jacks, Queens, and Kings.
+ * @returns {Array<Object>} 40 card objects
+ */
 export function createDeck() {
   const deck = [];
   let id = 1;
@@ -32,6 +51,11 @@ export function createDeck() {
   return deck;
 }
 
+/**
+ * Shuffles deck using Fisher-Yates algorithm.
+ * @param {Array<Object>} deck 
+ * @returns {Array<Object>}
+ */
 export function shuffleDeck(deck) {
   const shuffled = [...deck];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -41,7 +65,13 @@ export function shuffleDeck(deck) {
   return shuffled;
 }
 
-// Find all subsets of looseCards whose values sum up to target
+/**
+ * Finds all subsets of cards whose numerical values add up to target.
+ * Requires subset length >= 2 (single card match is a pair, not a sum).
+ * @param {Array<Object>} cards 
+ * @param {number} target 
+ * @returns {Array<Array<Object>>}
+ */
 export function findSubsetsSummingTo(cards, target) {
   const results = [];
   

@@ -2,6 +2,10 @@
 
 A sleek, responsive web edition of **South African Kasi (Township) Casino** (40-card Cassino), featuring smooth 60fps animations, rich Web Audio synthesized sound effects, tactical AI opponents, and strict township rules.
 
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](test_engine.js)
+[![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-blue.svg)](index.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 ---
 
 ## 🎴 The Kasi Casino Rules
@@ -15,7 +19,7 @@ Unlike international 52-card Cassino, **Kasi Casino** is played with a **40-card
 - **10 cards** dealt to Player 1 (You)
 - **10 cards** dealt to Player 2 (Bra Moss)
 - **10 cards** dealt to Player 3 (Sis Thandi)
-- **10 cards** dealt face-up across the center table
+- **10 cards** dealt face-up across the center table layout
 - Play proceeds clockwise until all 10 cards are played out across a single high-stakes round.
 
 ---
@@ -49,6 +53,27 @@ On each turn, you play **1 card** from your hand to execute one of the following
 
 ---
 
+## 📂 Project Architecture
+
+```
+kasi-casino/
+├── index.html            # Main markup, felt table layout, and modal dialogs
+├── style.css             # Responsive emerald felt theme, animations, and card styles
+├── gameEngine.js         # 40-card deck logic, subset-sum combination solver, rules
+├── aiPlayer.js           # Strategic AI opponents (Bra Moss & Sis Thandi)
+├── cardRenderer.js       # Accessible DOM & SVG playing card components
+├── audio.js              # Synthesized Web Audio sound effects (zero external files)
+├── app.js                # Game loop controller, turn orchestration, DOM event binding
+├── test_engine.js        # Node.js unit tests for card rules & scoring
+├── simulate_match.js     # Full multi-match end-to-end simulation test
+├── ARCHITECTURE.md       # Deep technical documentation and state machine details
+└── CONTRIBUTING.md       # Contribution guide, code standards, and PR instructions
+```
+
+For detailed class diagrams, state machine flows, and algorithm walkthroughs, read [ARCHITECTURE.md](ARCHITECTURE.md).
+
+---
+
 ## 🚀 How to Run Locally
 
 This is a zero-dependency modern web app. You can run it with any static web server:
@@ -62,13 +87,30 @@ cd kasi-casino
 python3 -m http.server 8080
 ```
 
-Then open `http://localhost:8080` in any mobile or desktop web browser.
+Then open `http://localhost:8080` in your web browser.
 
 ---
 
-## 🛠️ Tech Stack
+## 🧪 Running Tests
 
-- **HTML5 & Vanilla ES Modules** (modular architecture: `gameEngine.js`, `aiPlayer.js`, `audio.js`, `cardRenderer.js`, `app.js`).
-- **Responsive CSS3** with dark emerald felt gradient, gold metallic accents, and viewport-locked layout for mobile devices.
-- **Web Audio API** synthesizer for realistic card dealing, clicks, chips chimes, and sweep fanfares.
-- **No external CDN dependencies**—loads instantly and works offline.
+Ensure all rules, math combinations, and full match simulations pass:
+
+```bash
+# Run engine unit tests
+node test_engine.js
+
+# Run full 5-match simulation (deal to 21 points)
+node simulate_match.js
+```
+
+---
+
+## 🤝 Contributing
+
+Anyone is welcome to contribute! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, coding standards, and pull request guidelines.
+
+---
+
+## 📄 License
+
+MIT License. Feel free to use, modify, and build upon this game!
