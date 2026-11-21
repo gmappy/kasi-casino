@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Kasi Casino - 40-Card South African Cassino</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="logo-area">
+      <span class="logo-badge">♠️</span>
+      <div>
+        <div class="logo-title">KASI CASINO</div>
+        <span class="logo-sub">40-Card Township Edition</span>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="btn-icon" id="btnToggleSound" title="Toggle Sound">🔊</button>
+      <button class="btn-icon" id="btnRules" title="Rules & Guide">📖</button>
+      <button class="btn-icon" id="btnSettings" title="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- Opponents Bar (Bra Moss & Sis Thandi) -->
+  <div class="opponents-bar" id="opponentsBar">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- Table Arena (Felt) -->
+  <main class="table-arena">
+    <!-- Active Builds on Table -->
+    <div class="builds-container" id="buildsContainer">
+      <!-- Active builds rendered here -->
+    </div>
+
+    <!-- Loose Table Cards -->
+    <div class="loose-cards-area" id="looseCardsArea">
+      <!-- Loose cards rendered here -->
+    </div>
+
+    <!-- Sweep Celebration Overlay -->
+    <div class="sweep-overlay" id="sweepOverlay">
+      💥 SWEEP! (+1 PT)
+    </div>
+
+    <!-- Live Move History Feed -->
+    <div class="history-feed" id="historyFeed">
+      <!-- Recent turn actions -->
+    </div>
+  </main>
+
+  <!-- Bottom Player Dock -->
+  <footer class="player-dock">
+    <div class="dock-header">
+      <div class="turn-status-banner">
+        <span class="turn-pulse"></span>
+        <span id="turnStatusText">Your Turn: Tap a card from your hand</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons Row -->
+    <div class="dock-actions-row">
+      <button class="btn-action btn-capture" id="btnCapture" disabled>
+        <span>🎯 Capture</span>
+      </button>
+      <button class="btn-action btn-build" id="btnBuild" disabled>
+        <span>🏗️ Build</span>
+      </button>
+      <button class="btn-action btn-trail" id="btnTrail" disabled>
+        <span>🃏 Trail</span>
+      </button>
+      <button class="btn-action btn-count-out" id="btnCountOut">
+        <span>🏆 Count Out</span>
+      </button>
+    </div>
+
+    <!-- Player's 10-Card Hand -->
+    <div class="player-hand" id="playerHand">
+      <!-- Hand cards rendered here -->
+    </div>
+  </footer>
+
+  <!-- Rules & Strategy Modal -->
+  <div class="modal-backdrop" id="rulesModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">📖 Kasi Casino Rules</div>
+        <button class="modal-close" id="btnCloseRules">✕</button>
+      </div>
+      <div class="modal-body">
+        <h4>The 40-Card Deck</h4>
+        <p>In South African Kasi Casino, all face cards (Jacks, Queens, Kings) are removed. Only <strong>Ace through 10</strong> are used (40 cards total). <strong>Ace is strictly 1</strong>.</p>
+
+        <h4>3-Hand Deal (10-10-10-10)</h4>
+        <p>Each of the 3 players gets 10 cards, and 10 cards are dealt face-up on the table layout. The entire 40-card deck is in play!</p>
+
+        <h4>Core Turn Actions</h4>
+        <ul>
+          <li><strong>Pair Capture:</strong> Match cards of the exact same rank.</li>
+          <li><strong>Sum Capture:</strong> Capture cards whose values add up to your played card (e.g., 9 captures 5+4 and 7+2 at once).</li>
+          <li><strong>Building:</strong> Combine a hand card with table cards into a target rank. <em>Rule: You MUST hold a card of the target rank in hand!</em></li>
+          <li><strong>Locked Double Builds:</strong> When two sets of the same rank are merged, the build is locked! Nobody can increase it; only capturing it with that rank is allowed.</li>
+          <li><strong>Increasing Builds:</strong> An opponent can steal an unlocked single build by adding a card to raise the total, if they hold the higher target rank.</li>
+          <li><strong>Trailing:</strong> Placing a card face-up. <em>Rule: You cannot trail if you own an active build!</em></li>
+        </ul>
+
+        <h4>Scoring (11 Base Points + Sweeps)</h4>
+        <ul>
+          <li><strong>Most Cards (3 pts):</strong> Highest card count (out of 40). 0 pts if tied.</li>
+          <li><strong>Most Spades (1 pt):</strong> Highest Spades count (out of 10). 0 pts if tied.</li>
+          <li><strong>Big Casino (10♦):</strong> 2 pts to capturer.</li>
+          <li><strong>Little Casino (2♠):</strong> 1 pt to capturer.</li>
+          <li><strong>Aces:</strong> 1 pt each (4 pts total).</li>
+          <li><strong>Sweeps:</strong> 1 bonus pt whenever you clear the entire table in one move!</li>
+        </ul>
+
+        <h4>Last Capture & Count Out</h4>
+        <p>Whoever makes the last capture of the round takes all leftover cards on the table. First to 21 points wins the match! You can declare <strong>Count Out</strong> mid-round if you reach 21, but miscounting results in an automatic loss!</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action" onclick="document.getElementById('rulesModal').classList.remove('open')">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">⚙️ Game Settings</div>
+        <button class="modal-close" id="btnCloseSettings">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 16px;">
+          <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+            <span>⚡ Fast AI Turns (Quick play)</span>
+            <input type="checkbox" id="toggleFastAi" style="transform: scale(1.3);">
+          </label>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="display: flex; align-items: center; justify-content: space-between;">
+            <span>🎯 Target Match Score</span>
+            <select id="selectTargetScore" style="background: #1e293b; color: #fff; padding: 6px 12px; border: 1px solid #475569; border-radius: 6px;">
+              <option value="21" selected>21 Points (Standard)</option>
+              <option value="11">11 Points (Quick Match)</option>
+            </select>
+          </label>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <button class="btn-action" id="btnResetMatch" style="width: 100%; justify-content: center; background: #dc2626; border-color: #ef4444;">
+            🔄 Restart Match
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action" onclick="document.getElementById('settingsModal').classList.remove('open')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Build Selector Modal -->
+  <div class="modal-backdrop" id="buildModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">🏗️ Select Build Play</div>
+        <button class="modal-close" id="btnCloseBuildModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+          Choose which build you want to create or modify with your selected card:
+        </p>
+        <div id="buildOptionsList">
+          <!-- Build options dynamically inserted -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Round Summary Modal -->
+  <div class="modal-backdrop" id="roundSummaryModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">📊 Round Summary</div>
+      </div>
+      <div class="modal-body" id="roundSummaryBody">
+        <!-- Score summary table -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action btn-build" id="btnNextRound" style="width: 100%; justify-content: center; font-size: 1rem; padding: 10px;">
+          Deal Next Round ➡️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over Modal -->
+  <div class="modal-backdrop" id="gameOverModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">🏆 Champion Declared!</div>
+      </div>
+      <div class="modal-body" id="gameOverBody">
+        <!-- Winner details -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action btn-count-out" id="btnPlayAgain" style="width: 100%; justify-content: center; font-size: 1rem; padding: 10px;">
+          Play Again 🔄
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
